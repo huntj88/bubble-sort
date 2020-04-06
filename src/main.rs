@@ -6,14 +6,17 @@ mod bubble_sort;
 fn main() {
     println!("Hello, world!");
 
-    let blah = bubble_sort::sort(&vec! {1, 2, 3, 2, 1});
-    println!("{:?}", blah);
+    let mut vec1 = vec! {1, 2, 3, 2, 1};
+    bubble_sort::sort(&mut vec1);
+
+    for x in vec1 {
+        println!("{:?}", x)
+    }
 
     run_list();
 }
 
 fn run_list() {
-
     let mut list = linked_list::MyList::create();
 
     println!("{:?}", list);

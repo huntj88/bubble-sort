@@ -1,29 +1,20 @@
 use std::clone::Clone;
 use std::cmp::{Ord, Ordering};
 
-use crate::bubble_sort::SortStatus::{Sorted, Unsorted};
-
-pub(crate) fn sort<T: Ord + Clone>(list: &Vec<T>) -> Vec<T> {
-    let mut vec = list.to_vec();
-
+pub(crate) fn sort<T: Ord>(mut list: &mut [T]) {
     loop {
-        match reorder_one_pass(vec) {
-            Sorted(after) => {
-                return after;
-            }
-            Unsorted(after) => {
-                vec = after;
-            }
+        if is_sorted_or_sort_one_pass(list) {
+            break;
         }
     }
 }
 
-fn reorder_one_pass<T: Ord>(mut list: Vec<T>) -> SortStatus<T> {
+fn is_sorted_or_sort_one_pass<T: Ord>(list: &mut [T]) -> bool {
     let mut index = 0;
     let mut swapped_any = false;
     while let Some(current) = list.get(index) {
         if let Some(next) = list.get(index + 1) {
-            if let Ordering::Greater = current.cmp(next) {
+            if current > next {
                 swapped_any = true;
                 list.swap(index, index + 1);
             }
@@ -31,14 +22,5 @@ fn reorder_one_pass<T: Ord>(mut list: Vec<T>) -> SortStatus<T> {
         index += 1
     };
 
-    if swapped_any {
-        Unsorted(list)
-    } else {
-        Sorted(list)
-    }
-}
-
-enum SortStatus<T> {
-    Sorted(Vec<T>),
-    Unsorted(Vec<T>),
+    !swapped_any
 }
